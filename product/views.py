@@ -1,10 +1,13 @@
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
 from rest_framework.authentication import TokenAuthentication
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.filters import SearchFilter, OrderingFilter
 from .serializers import *
 
 class AutoAPIListPagination(PageNumberPagination):
@@ -21,6 +24,10 @@ class AutoAPIList(generics.ListCreateAPIView):
     filter_fields = ['price']
     search_fields = ['mark', 'model']
     ordering_fields = ['price', 'mark']
+
+    @method_decorator(cache_page(60 * 15))
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     
 

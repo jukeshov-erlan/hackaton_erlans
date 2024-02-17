@@ -6,7 +6,7 @@ router = SimpleRouter()
 router.register('comments', CommentView)
 router.register('ratings', RatingView)
 router.register('likes', LikeView)
-router.register('bookmarks', BookMarkView)
+# router.register('bookmarks', BookMarkView)
 
 
 

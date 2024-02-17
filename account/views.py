@@ -12,7 +12,6 @@ class RegistrationView(APIView):
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # is_valid метод который проверяет данные
         serializer.save()
         return Response('Аккаунт успешно создан', status=201)
 
@@ -28,11 +27,6 @@ class ActivationView(APIView):
 
 class LoginView(ObtainAuthToken):
     serializer_class = LoginSerializer
-
-# class SomeView(APIView):
-#     # permission_classes = [IsAuthenticated]
-#     def get(self, request):
-#         return Response('helloooooooo')
 
 
 class LogoutView(APIView):
@@ -75,12 +69,12 @@ class ForgotPasswordCompleteView(APIView):
     
 
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)
 
-def some_function():
-    try:
-        # Ваш код здесь
-        logger.info("Функция успешно выполнена")
-    except Exception as e:
-        # Регистрация ошибки
-        logger.error(f"Произошла ошибка: {e}", exc_info=True)
+# def some_function():
+#     try:
+#         # Ваш код здесь
+#         logger.info("Функция успешно выполнена")
+#     except Exception as e:
+#         # Регистрация ошибки
+#         logger.error(f"Произошла ошибка: {e}", exc_info=True)
