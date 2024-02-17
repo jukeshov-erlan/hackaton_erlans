@@ -28,3 +28,26 @@ class RatingView(ModelViewSet):
             permissions = [IsAuthorPermission]
         return [permission() for permission in permissions]
 
+class LikeView(ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permissions = [AllowAny]
+        elif self.action == 'create':
+            permissions = [IsAuthenticated]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            permissions = [IsAuthorPermission]
+        return [permission() for permission in permissions]
+
+class BookMarkView(ModelViewSet):
+    queryset = Bookmark.objects.all()
+    serializer_class = BookMarkSerializer
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permissions = [AllowAny]
+        elif self.action == 'create':
+            permissions = [IsAuthenticated]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            permissions = [IsAuthorPermission]
+        return [permission() for permission in permissions]

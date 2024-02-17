@@ -38,3 +38,13 @@ class RatingSerializer(serializers.ModelSerializer):
                 'Вы уже оставили отзыв на данный продукт'
             )
         return post
+    
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Like
+        fields = '__all__'
+
+class BookMarkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Bookmark
+        fields='__all__'
