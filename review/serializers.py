@@ -27,7 +27,7 @@ class RatingSerializer(serializers.ModelSerializer):
     def validate_rating(self, rating):
         if not rating in range(1, 6):
             raise serializers.ValidationError(
-                'Рейтинг должен быть от 1 до 6'
+                'Рейтинг должен быть от 1 до 5'
             )
         return rating
     
@@ -35,7 +35,7 @@ class RatingSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if self.Meta.model.objects.filter(post=post, author=user).exists():
             raise serializers.ValidationError(
-                'Вы уже оставили отзыв на данный продукт'
+                'Вы уже оставили отзыв на данный пост'
             )
         return post
     
@@ -44,7 +44,27 @@ class LikeSerializer(serializers.ModelSerializer):
         model=Like
         fields = '__all__'
 
+    def validate(self, attrs):
+        user = self.context.get('request').user
+        post = attrs.get('post')
+        if Like.objects.filter(post=post, author=user).exists():
+            raise serializers.ValidationError(
+                'Вы уже лайкнули данный пост'
+            )
+        return attrs
+
+    
+
 class BookMarkSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Bookmark
-        fields='__all__'
+        model = Bookmark
+        fields = '__all__'
+
+    def validate(self, attrs):
+        user = self.context.get('request').user
+        post = attrs.get('post')
+        if Bookmark.objects.filter(post=post, user=user).exists():
+            raise serializers.ValidationError(
+                'Вы уже добавили данную закладку'
+            )
+        return attrs
