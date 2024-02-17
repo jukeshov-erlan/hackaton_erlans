@@ -7,6 +7,8 @@ from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
 import logging
 
+logger = logging.getLogger(__name__)
+
 class RegistrationView(APIView):
     @swagger_auto_schema(request_body=RegistrationSerializer())
     def post(self, request):
@@ -34,6 +36,7 @@ class LogoutView(APIView):
 
     def delete(self, request):
         user = request.user
+        logger.info(f"User {user} logged out")
         print(dir(request))
         Token.objects.filter(user=user).delete()
 
@@ -46,6 +49,7 @@ class ChangePasswordView(APIView):
         serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
+        logger.info(f"User {request.user} changed their password")
         return Response('Пароль успешно изменен', status=200)
 
 
@@ -56,6 +60,7 @@ class ForgotPasswordView(APIView):
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.send_verification_email()
+        logger.info(f"Forgot password request received for email {serializer.validated_data['email']}")
         return Response('Сообщение для восстановления отправлено на почту', status=200)
     
 
@@ -65,16 +70,8 @@ class ForgotPasswordCompleteView(APIView):
         serializer = ForgotPasswordCompleteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.set_new_password()
+        logger.info(f"User {request.user} completed forgot password process")
         return Response('Пароль успешно изменен', status=200)
     
 
 
-# logger = logging.getLogger(__name__)
-
-# def some_function():
-#     try:
-#         # Ваш код здесь
-#         logger.info("Функция успешно выполнена")
-#     except Exception as e:
-#         # Регистрация ошибки
-#         logger.error(f"Произошла ошибка: {e}", exc_info=True)

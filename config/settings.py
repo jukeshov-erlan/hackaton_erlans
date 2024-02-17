@@ -171,9 +171,33 @@ EMAIL_HOST_USER = 'ersik.j10@gmail.com'
 EMAIL_HOST_PASSWORD = 'lhxzenkhmeshczxr'
 
 
-
-
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'information.log', 
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'account': { 
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 # # Уровень логирования: DEBUG, INFO, WARNING, ERROR, CRITICAL
 # LOG_LEVEL = os.environ.get('LOG_LEVEL', 'DEBUG')
