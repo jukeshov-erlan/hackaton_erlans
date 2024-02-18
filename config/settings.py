@@ -15,6 +15,8 @@ import os
 import logging
 from decouple import config
 
+APIKEY = config("OPENAI_KEY")
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'account',
     'product',
+    'api',
     'review',
     'drf_yasg',
     'django_filters',
@@ -159,8 +162,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '5/day',
-        'user': '10/day'
+        'anon': '50/day',
+        'user': '100/day'
     }
 }
 
