@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 import logging
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*^p1rq+=z!-_x5vi&hbe-h_p922w73ep3v@tt(o1@-%%fv%eze'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -87,9 +88,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project2',
-        'USER': 'erlan',
-        'PASSWORD': 1,
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
         'PORT': 5432
     }
@@ -152,8 +153,16 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PARSER_CLASSES': (
     #     'rest_framework.parsers.JSONParser',
     # ),
-}
 
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '5/day',
+        'user': '10/day'
+    }
+}
 
 CACHES = {
     'default': {
@@ -167,8 +176,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ersik.j10@gmail.com'
-EMAIL_HOST_PASSWORD = 'lhxzenkhmeshczxr'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 LOGGING = {
@@ -199,12 +208,3 @@ LOGGING = {
     },
 }
 
-# # Уровень логирования: DEBUG, INFO, WARNING, ERROR, CRITICAL
-# LOG_LEVEL = os.environ.get('LOG_LEVEL', 'DEBUG')
-
-# # Создание папки log внутри вашего проекта, если ее нет
-# LOGGING_DIR = os.path.join(BASE_DIR, 'log')
-# if not os.path.exists(LOGGING_DIR):
-#     os.makedirs(LOGGING_DIR)
-
-# # Путь к файлу лога
